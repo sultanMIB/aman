@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة عشاء بمكافآت</title>
+    <style>
+        :root {
+            --primary-color: #6d4c41;
+            --secondary-color: #d7ccc8;
+            --accent-color: #8d6e63;
+            --text-color: #5d4037;
+            --reward-color: #388e3c;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+        
+        .card {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .invitation-text {
+            line-height: 1.8;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 20px;
+        }
+        
+        .reward-section {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #eee;
+        }
+        
+        .reward-badge {
+            background: var(--reward-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            margin: 5px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .share-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .customize-panel {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        textarea, input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+        
+        .referral-link {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h1>دعوة عشاء مميزة</h1>
+            <p>احصل على 1$ لكل صديق يدعوه</p>
+        </div>
+        
+        <div class="card-body">
+            <div class="invitation-text" id="invitationText">
+                <p>السلام عليكم ورحمة الله وبركاته</p>
+                <p>يسرني دعوتكم لحضور حفل عشاء يوم <strong>الجمعة الموافق 15 أكتوبر 2023</strong></p>
+                <p>الساعة: <strong>8:00 مساءً</strong></p>
+                <p>المكان: <strong>مطعم الواحة - شارع الملك فهد</strong></p>
+                <p>نتطلع لرؤيتكم ومشاركتكم هذه الأمسية الجميلة</p>
+            </div>
+            
+            <div class="reward-section">
+                <h3>كيف تربح 1$ لكل صديق؟ <span class="reward-badge">عرض محدود</span></h3>
+                <p>1. اضغط على زر "مشاركة الدعوة"</p>
+                <p>2. أرسل الرابط لاصدقائك</p>
+                <p>3. احصل على 1$ لكل صديق يقبل الدعوة</p>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="respond(true)">قبول الدعوة</button>
+                <button class="btn btn-outline" onclick="respond(false)">اعتذار</button>
+            </div>
+            
+            <div class="share-buttons hidden" id="shareButtons">
+                <button class="btn btn-primary" onclick="shareViaWhatsApp()">
+                    مشاركة عبر واتساب
+                </button>
+                <button class="btn btn-primary" onclick="shareViaTelegram()">
+                    مشاركة عبر تليجرام
+                </button>
+                <button class="btn btn-outline" onclick="showCustomizePanel()">
+                    تخصيص الدعوة
+                </button>
+            </div>
+            
+            <div class="customize-panel" id="customizePanel">
+                <h3>تخصيص دعوتك</h3>
+                <textarea id="customMessage" rows="4" placeholder="اكتب رسالة الدعوة المخصصة هنا..."></textarea>
+                <input type="datetime-local" id="customDate">
+                <button class="btn btn-primary" onclick="updateInvitation()">تحديث الدعوة</button>
+            </div>
+            
+            <div class="referral-link hidden" id="referralLink">
+                <p>أو انسخ هذا الرابط وأرسله لأصدقائك:</p>
+                <div id="linkText"></div>
+                <button class="btn btn-outline" onclick="copyLink()" style="margin-top:10px;">نسخ الرابط</button>
+            </div>
+            
+            <div class="response-message hidden" id="responseMessage"></div>
+        </div>
+    </div>
+    
+    <script>
+        // بيانات المستخدم والمكافآت
+        let userData = {
+            id: generateUserId(),
+            name: '',
+            response: null,
+            rewardBalance: 0,
+            referredFriends: 0
+        };
+        
+        // بيانات الدعوة القابلة للتخصيص
+        let invitationData = {
+            defaultMessage: document.getElementById('invitationText').innerHTML,
+            customMessage: '',
+            date: 'الجمعة الموافق 15 أكتوبر 2023',
+            time: '8:00 مساءً',
+            location: 'مطعم الواحة - شارع الملك فهد'
+        };
+        
+        // توليد معرف فريد للمستخدم
+        function generateUserId() {
+            return 'user_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        // الرد على الدعوة
+        function respond(accepted) {
+            userData.response = accepted;
+            document.querySelector('.buttons').classList.add('hidden');
+            document.getElementById('shareButtons').classList.remove('hidden');
+            
+            const responseMessage = document.getElementById('responseMessage');
+            responseMessage.classList.remove('hidden');
+            
+            if(accepted) {
+                responseMessage.innerHTML = `
+                    <h3>شكراً لقبول الدعوة!</h3>
+                    <p>يمكنك الآن كسب 1$ لكل صديق يدعوه عبر الرابط الخاص بك</p>
+                `;
+                generateReferralLink();
+            } else {
+                responseMessage.innerHTML = `
+                    <h3>شكراً لإعلامنا</h3>
+                    <p>نأسف لعدم تمكنك من الحضور، يمكنك مع ذلك مشاركة الدعوة مع أصدقائك وكسب المكافآت</p>
+                `;
+                generateReferralLink();
+            }
+            
+            saveUserData();
+        }
+        
+        // توليد رابط الإحالة
+        function generateReferralLink() {
+            const baseUrl = window.location.href.split('?')[0];
+            const referralUrl = `${baseUrl}?ref=${userData.id}`;
+            document.getElementById('linkText').textContent = referralUrl;
+            document.getElementById('referralLink').classList.remove('hidden');
+            return referralUrl;
+        }
+        
+        // نسخ رابط الإحالة
+        function copyLink() {
+            const linkText = document.getElementById('linkText').textContent;
+            navigator.clipboard.writeText(linkText).then(() => {
+                alert('تم نسخ الرابط بنجاح!');
+            });
+        }
+        
+        // مشاركة عبر واتساب
+        function shareViaWhatsApp() {
+            const referralUrl = generateReferralLink();
+            const message = `دعوة لحضور عشاء مميز: ${referralUrl}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+        
+        // مشاركة عبر تليجرام
+        function shareViaTelegram() {
+            const referralUrl = generateReferralLink();
+            const message = `دعوة لحضور عشاء مميز: ${referralUrl}`;
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(referralUrl)}&text=${encodeURIComponent(message)}`, '_blank');
+        }
+        
+        // عرض لوحة التخصيص
+        function showCustomizePanel() {
+            document.getElementById('customizePanel').style.display = 'block';
+        }
+        
+        // تحديث الدعوة المخصصة
+        function updateInvitation() {
+            const customMessage = document.getElementById('customMessage').value;
+            const customDate = document.getElementById('customDate').value;
+            
+            if(customMessage) {
+                invitationData.customMessage = customMessage;
+            }
+            
+            if(customDate) {
+                const dateObj = new Date(customDate);
+                invitationData.date = formatArabicDate(dateObj);
+                invitationData.time = formatArabicTime(dateObj);
+            }
+            
+            updateInvitationText();
+            document.getElementById('customizePanel').style.display = 'none';
+            alert('تم تحديث الدعوة بنجاح!');
+        }
+        
+        // تحديث نص الدعوة
+        function updateInvitationText() {
+            const invitationText = document.getElementById('invitationText');
+            
+            if(invitationData.customMessage) {
+                invitationText.innerHTML = invitationData.customMessage;
+            } else {
+                invitationText.innerHTML = `
+                    <p>السلام عليكم ورحمة الله وبركاته</p>
+                    <p>يسرني دعوتكم لحضور حفل عشاء يوم <strong>${invitationData.date}</strong></p>
+                    <p>الساعة: <strong>${invitationData.time}</strong></p>
+                    <p>المكان: <strong>${invitationData.location}</strong></p>
+                    <p>نتطلع لرؤيتكم ومشاركتكم هذه الأمسية الجميلة</p>
+                `;
+            }
+        }
+        
+        // تنسيق التاريخ بالعربية
+        function formatArabicDate(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('ar-EG', options);
+        }
+        
+        // تنسيق الوقت بالعربية
+        function formatArabicTime(date) {
+            const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+            return date.toLocaleTimeString('ar-EG', options);
+        }
+        
+        // حفظ بيانات المستخدم
+        function saveUserData() {
+            localStorage.setItem('invitationUserData', JSON.stringify(userData));
+        }
+        
+        // تحميل بيانات المستخدم
+        function loadUserData() {
+            const savedData = localStorage.getItem('invitationUserData');
+            if(savedData) {
+                userData = JSON.parse(savedData);
+                if(userData.response !== null) {
+                    document.querySelector('.buttons').classList.add('hidden');
+                    document.getElementById('shareButtons').classList.remove('hidden');
+                    document.getElementById('referralLink').classList.remove('hidden');
+                    generateReferralLink();
+                }
+            }
+        }
+        
+        // التحقق من وجود إحالة في الرابط
+        function checkForReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referralId = urlParams.get('ref');
+            
+            if(referralId && referralId !== userData.id) {
+                // هنا يمكنك إضافة منطق إضافة المكافأة للمستخدم المحال
+                alert('شكراً لقبول الدعوة! تمت إضافة 1$ إلى رصيد المحال.');
+            }
+        }
+        
+        // عند تحميل الصفحة
+        window.onload = function() {
+            loadUserData();
+            checkForReferral();
+        };
+    </script>
+</body>
+</html>
