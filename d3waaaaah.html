@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة عشاء</title>
+    <style>
+        :root {
+            --primary-color: #6d4c41;
+            --secondary-color: #d7ccc8;
+            --accent-color: #8d6e63;
+            --text-color: #5d4037;
+            --light-text: #efebe9;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #efebe9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+        
+        .card {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background: var(--primary-color);
+            color: var(--light-text);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .card-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .invitation-text {
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .invitation-text p {
+            margin: 15px 0;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            min-width: 150px;
+        }
+        
+        .accept {
+            background-color: #388e3c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(56, 142, 60, 0.3);
+        }
+        
+        .accept:hover {
+            background-color: #2e7d32;
+            transform: translateY(-2px);
+        }
+        
+        .decline {
+            background-color: #e53935;
+            color: white;
+            box-shadow: 0 4px 8px rgba(229, 57, 53, 0.3);
+        }
+        
+        .decline:hover {
+            background-color: #c62828;
+            transform: translateY(-2px);
+        }
+        
+        .response-message {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+        
+        .host-section {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        
+        .host-btn {
+            background: transparent;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            padding: 5px;
+        }
+        
+        .host-btn:hover {
+            opacity: 1;
+        }
+        
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .modal-content h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .stats-container {
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <div class="host-section">
+                <button class="host-btn" onclick="showPasswordModal()">⋮</button>
+            </div>
+            <h1>دعوة عشاء</h1>
+        </div>
+        
+        <div class="card-body">
+            <div class="invitation-text">
+                <p>السلام عليكم ورحمة الله وبركاته</p>
+                <p> حياكم الله للعشاء الليلة </p>
+                <p>الساعة: 8:00 مساءً</p>
+                <p>المكان: في بيتنا بيت ابوسعود في الصباحية</p>
+                <p>ياهلا ومرحبا</p>
+            </div>
+            
+            <div class="buttons">
+                <button class="accept" onclick="respond(true)">قبول الدعوة</button>
+                <button class="decline" onclick="respond(false)">اعتذار عن الحضور</button>
+            </div>
+            
+            <div id="responseMessage" class="response-message">
+                <!-- سيتم تعبئته بالجافاسكريبت -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="passwordModal" class="password-modal">
+        <div class="modal-content">
+            <h2>الدخول كداعي</h2>
+            <input type="password" id="hostPassword" class="password-input" placeholder="كلمة المرور">
+            <button class="accept" onclick="checkPassword()">الدخول</button>
+            <p id="passwordError" style="color: red; display: none; margin-top: 10px;">كلمة المرور غير صحيحة</p>
+            
+            <div id="statsView" class="stats-container hidden">
+                <h3>إحصائية الردود</h3>
+                <div class="stat-item">
+                    <span>عدد الموافقين:</span>
+                    <span id="acceptedCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>عدد المعتذرين:</span>
+                    <span id="declinedCount">0</span>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="decline" onclick="resetResponses()" style="margin-right: 10px;">إعادة تعيين</button>
+                    <button onclick="hideModal()">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // تهيئة الردود إذا لم تكن موجودة
+        if(!localStorage.getItem('responses')) {
+            localStorage.setItem('responses', JSON.stringify({
+                accepted: 0,
+                declined: 0
+            }));
+        }
+        
+        // كلمة مرور الداعي (يمكن تغييرها)
+        const HOST_PASSWORD = "1234";
+        
+        function respond(accepted) {
+            const responses = JSON.parse(localStorage.getItem('responses'));
+            const responseMessage = document.getElementById('responseMessage');
+            
+            if(accepted) {
+                responses.accepted++;
+                responseMessage.innerHTML = '<h3>شكراً لقبول الدعوة!</h3><p>   حياك الله نتشرف بحضورك </p>';
+            } else {
+                responses.declined++;
+                responseMessage.innerHTML = '<h3> والله ودنا بحضورك </h3><p>     الجايات اكثر</p> ';
+            }
+            
+            localStorage.setItem('responses', JSON.stringify(responses));
+            responseMessage.style.display = 'block';
+            document.querySelector('.buttons').style.display = 'none';
+            
+            // تحديث العرض إذا كان المضيف يشاهد الإحصائية
+            if(!document.getElementById('statsView').classList.contains('hidden')) {
+                updateStatsView();
+            }
+        }
+        
+        function showPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.getElementById('statsView').classList.add('hidden');
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('hostPassword').value = '';
+        }
+        
+        function hideModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+        }
+        
+        function checkPassword() {
+            const password = document.getElementById('hostPassword').value;
+            if(password === HOST_PASSWORD) {
+                document.getElementById('passwordError').style.display = 'none';
+                document.getElementById('statsView').classList.remove('hidden');
+                updateStatsView();
+            } else {
+                document.getElementById('passwordError').style.display = 'block';
+            }
+        }
+        
+        function updateStatsView() {
+            const responses = JSON.parse(localStorage.getItem('responses'));
+            document.getElementById('acceptedCount').textContent = responses.accepted;
+            document.getElementById('declinedCount').textContent = responses.declined;
+        }
+        
+        function resetResponses() {
+            if(confirm('هل أنت متأكد من رغبتك في إعادة تعيين جميع الردود؟')) {
+                localStorage.setItem('responses', JSON.stringify({
+                    accepted: 0,
+                    declined: 0
+                }));
+                updateStatsView();
+            }
+        }
+    </script>
+</body>
+</html>
